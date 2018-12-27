@@ -2,4 +2,4 @@ def add(a, b) {
     return a + b
 }
 
-add(x, y)
+add(input.x, input.y)

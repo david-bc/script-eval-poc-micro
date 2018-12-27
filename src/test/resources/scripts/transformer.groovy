@@ -35,4 +35,4 @@ def transform(entity) {
     result
 }
 
-transform(entity)
+transform(input.entity)

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Maps;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -69,7 +70,10 @@ public class GroovyScriptRpcHandler implements RpcHandler {
 
     public JsonNode eval(GroovyScript groovyScript) {
         StaticScriptSource src = new StaticScriptSource(groovyScript.getSrc(), groovyScript.getName());
-        return jsonObjectMapper.valueToTree(scriptEvaluator.evaluate(src, groovyScript.getParams()));
+        Map<String, Object> input = Maps.newHashMap();
+        input.put("input", groovyScript.getParams());
+        // TODO: more stuff
+        return jsonObjectMapper.valueToTree(scriptEvaluator.evaluate(src, input));
     }
 
     @Data

@@ -100,7 +100,7 @@ public class GroovyScriptRpcHandlerTest {
         params.put("y", 242);
         GroovyScriptRpcHandler.GroovyScript input = GroovyScriptRpcHandler.GroovyScript.builder()
                 .name("TestingScript123")
-                .src("x + y")
+                .src("input.x + input.y")
                 .params(params)
                 .build();
         JsonNode expected = IntNode.valueOf(363);
@@ -117,7 +117,7 @@ public class GroovyScriptRpcHandlerTest {
         params.put("y", "World");
         GroovyScriptRpcHandler.GroovyScript input = GroovyScriptRpcHandler.GroovyScript.builder()
                 .name("TestingScript123")
-                .src("String.format('%s, %s!', x, y)")
+                .src("String.format('%s, %s!', input.x, input.y)")
                 .params(params)
                 .build();
         JsonNode expected = TextNode.valueOf("Hello, World!");

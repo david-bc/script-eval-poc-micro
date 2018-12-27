@@ -5,11 +5,17 @@ import com.bettercloud.poc.scripts.model.JsonRpcRequest;
 import com.bettercloud.poc.scripts.model.JsonRpcResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.reactive.config.CorsRegistry;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.util.pattern.PathPatternParser;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -18,7 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Configuration
-public class RoutingConfig {
+public class RoutingConfig implements WebFluxConfigurer {
 
     @Bean
     public RouterFunction<ServerResponse> rpcResponseRouterFunction(List<RpcHandler> handlers) {
@@ -44,5 +50,22 @@ public class RoutingConfig {
                                         .body(BodyInserters.fromObject(body))
                                 )
                 );
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> corsRouter() {
+        return RouterFunctions.route(
+                RequestPredicates.all(),
+                request -> ServerResponse.ok().syncBody(null)
+        );
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedHeaders("*")
+                .allowedMethods("*")
+                .allowCredentials(true);
     }
 }
